@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.2/themes/flick/jquery-ui.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    </head>
+    <body>
+        
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="recherche">Avec une query</label>
+                        <input type="text" class="form-control" id="recherche" aria-describedby="rechercheHelp">
+                        <small id="rechercheHelp" class="form-text text-muted">Les résultats sont obtenus avec la méthode : Client.search()</small>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="suggestions">Avec une suggestion</label>
+                        <input type="text" class="form-control" id="suggestions" aria-describedby="suggestionsHelp">
+                        <small id="suggestionsHelp" class="form-text text-muted">Les résultats sont obtenus avec la méthode : AutoCompleter.get_suggestions()</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.10.2/jquery-ui.js" ></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+        <script type="text/javascript">
+            $(function() {
+                $("#recherche").autocomplete({
+                    source: function(request, response) {
+                    $.getJSON("http://localhost:5000/recherche", {
+                        q: request.term,
+                    }, function(data) {
+                        response(data.adresses);
+                    });
+                    },
+                    minLength: 2,
+                    select: function(event, ui) {
+                        // console.log(ui.item.value);
+                    }
+                });
+                $("#suggestions").autocomplete({
+                    source: function(request, response) {
+                    $.getJSON("http://localhost:5000/suggestions", {
+                        q: request.term,
+                    }, function(data) {
+                        response(data.adresses);
+                    });
+                    },
+                    minLength: 2,
+                    select: function(event, ui) {
+                        // console.log(ui.item.value);
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
